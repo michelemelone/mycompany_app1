@@ -1,48 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
-        <client_script><![CDATA[function($scope, $http, spUtil) {
+        <client_script><![CDATA[function($scope) {
     var c = this;
 
-    c.today = new Date();
-    c.weekOffset = 0;
-    c.slots = [];
+    // --- Init from server data (no c.server.get on init) ---
+    c.slots       = c.data.slots       || [];
+    c.alreadyBooked = c.data.alreadyBooked || false;
+    c.weekOffset  = 0;
     c.selectedSlot = null;
-    c.booking = false;
-    c.message = '';
+    c.booking     = false;
+    c.message     = '';
     c.messageType = '';
-    c.alreadyBooked = false;
 
-    var DAYS = ['Monday', 'Wednesday', 'Friday'];
-    var DAY_INDICES = [1, 3, 5]; // 0=Sun
+    var DAYS    = ['Monday', 'Wednesday', 'Friday'];
+    var OFFSETS = [0, 2, 4]; // days from Monday
 
-    c.getWeekDates = function() {
-        var now = new Date(c.today);
+    c.computeWeekDates = function() {
+        var now = new Date();
         now.setDate(now.getDate() + c.weekOffset * 7);
-        var dayOfWeek = now.getDay(); // 0=Sun
+        var dow = now.getDay(); // 0=Sun
         var monday = new Date(now);
-        monday.setDate(now.getDate() - ((dayOfWeek + 6) % 7));
+        monday.setDate(now.getDate() - ((dow + 6) % 7));
 
-        c.weekDates = DAY_INDICES.map(function(idx, i) {
+        c.weekDates = OFFSETS.map(function(offset, i) {
             var d = new Date(monday);
-            d.setDate(monday.getDate() + idx - 1);
+            d.setDate(monday.getDate() + offset);
             return {
-                label: DAYS[i],
-                date: d.toISOString().split('T')[0],
+                label:   DAYS[i],
+                date:    d.toISOString().split('T')[0],
                 display: d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
             };
         });
         c.weekLabel = c.weekDates[0].display + ' – ' + c.weekDates[2].display;
     };
 
+    // Initial week dates (no server call needed)
+    c.computeWeekDates();
+
+    // Called only on user-triggered week nav (c.server available here)
     c.loadSlots = function() {
         c.slots = [];
         c.selectedSlot = null;
-        c.getWeekDates();
+        c.computeWeekDates();
         c.server.get({
             action: 'getSlots',
             dates: c.weekDates.map(function(d) { return d.date; })
         }).then(function(r) {
-            c.slots = r.data.slots;
+            c.slots        = r.data.slots;
             c.alreadyBooked = r.data.alreadyBooked;
         });
     };
@@ -51,38 +55,34 @@
     c.nextWeek = function() { c.weekOffset++; c.loadSlots(); };
 
     c.selectSlot = function(slot) {
-        if (slot.available && !c.alreadyBooked) {
-            c.selectedSlot = slot;
-        }
+        if (slot.available && !c.alreadyBooked) c.selectedSlot = slot;
     };
 
     c.confirmBooking = function() {
         if (!c.selectedSlot) return;
         c.booking = true;
         c.server.get({
-            action: 'bookLesson',
+            action:    'bookLesson',
             startTime: c.selectedSlot.startValue,
-            endTime: c.selectedSlot.endValue
+            endTime:   c.selectedSlot.endValue
         }).then(function(r) {
             c.booking = false;
             if (r.data.success) {
-                c.messageType = 'success';
-                c.message = 'Lesson booked successfully! A confirmation email has been sent.';
-                c.selectedSlot = null;
+                c.messageType   = 'success';
+                c.message       = 'Lesson booked! Confirmation email sent.';
+                c.selectedSlot  = null;
                 c.alreadyBooked = true;
                 c.loadSlots();
             } else {
                 c.messageType = 'danger';
-                c.message = r.data.error;
+                c.message     = r.data.error;
             }
         });
     };
 
     c.getSlotsForDate = function(date) {
-        return c.slots.filter(function(s) { return s.date === date; });
+        return (c.slots || []).filter(function(s) { return s.date === date; });
     };
-
-    c.loadSlots();
 }]]></client_script>
         <css><![CDATA[.german-calendar {
     font-family: inherit;
@@ -184,37 +184,55 @@
         <name>German Lesson Booking Calendar</name>
         <roles/>
         <script><![CDATA[(function() {
-    var action = input ? input.action : null;
 
-    if (action === 'getSlots') {
-        var dates = input.dates; // array of YYYY-MM-DD strings
+    function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+    function buildSlots(dates) {
         var availability = new x_608645_my_comp_0.LessonAvailability();
-        var alreadyBooked = availability.hasStudentBookedThisWeek(gs.getUserID());
-
         var slots = [];
         var startHours = [9, 10, 11, 13];
-
         for (var d = 0; d < dates.length; d++) {
             for (var h = 0; h < startHours.length; h++) {
-                var slotStart = new GlideDateTime();
-                slotStart.setDisplayValueInternal(dates[d] + ' ' + pad(startHours[h]) + ':00:00');
-                var slotEnd = new GlideDateTime(slotStart);
-                slotEnd.addSeconds(3600);
-
-                var isAvailable = availability.isSlotAvailable(slotStart.getValue(), slotEnd.getValue());
-
+                var s = new GlideDateTime();
+                s.setDisplayValueInternal(dates[d] + ' ' + pad(startHours[h]) + ':00:00');
+                var e = new GlideDateTime(s);
+                e.addSeconds(3600);
                 slots.push({
-                    date: dates[d],
-                    label: pad(startHours[h]) + ':00 – ' + pad(startHours[h] + 1) + ':00',
-                    startValue: slotStart.getValue(),
-                    endValue: slotEnd.getValue(),
-                    available: isAvailable
+                    date:       dates[d],
+                    label:      pad(startHours[h]) + ':00 – ' + pad(startHours[h] + 1) + ':00',
+                    startValue: s.getValue(),
+                    endValue:   e.getValue(),
+                    available:  availability.isSlotAvailable(s.getValue(), e.getValue())
                 });
             }
         }
+        return slots;
+    }
 
-        data.slots = slots;
-        data.alreadyBooked = alreadyBooked;
+    function currentWeekDates() {
+        // Server-side: compute Mon/Wed/Fri for the current week
+        var now = new GlideDateTime();
+        var dow = now.getDayOfWeekLocalTime(); // 1=Sun,2=Mon,...,7=Sat
+        var daysToMonday = (dow === 1) ? 6 : (dow - 2);
+        var monday = new GlideDateTime(now);
+        monday.addDaysLocalTime(-daysToMonday);
+        var dates = [];
+        var offsets = [0, 2, 4];
+        for (var i = 0; i < offsets.length; i++) {
+            var d = new GlideDateTime(monday);
+            d.addDaysLocalTime(offsets[i]);
+            dates.push(d.getLocalDate().getByFormat('yyyy-MM-dd'));
+        }
+        return dates;
+    }
+
+    var action = (input && input.action) ? input.action : '';
+
+    if (!action || action === 'getSlots') {
+        var dates = (action === 'getSlots') ? input.dates : currentWeekDates();
+        var availability = new x_608645_my_comp_0.LessonAvailability();
+        data.slots        = buildSlots(dates);
+        data.alreadyBooked = availability.hasStudentBookedThisWeek(gs.getUserID());
 
     } else if (action === 'bookLesson') {
         try {
@@ -225,48 +243,42 @@
                 data.error = 'You already have a lesson booked this week.';
                 return;
             }
-
             if (!availability.isSlotAvailable(input.startTime, input.endTime)) {
                 data.success = false;
-                data.error = 'Slot is no longer available. Please choose another.';
+                data.error = 'Slot no longer available. Choose another.';
                 return;
             }
 
-            // Pick an available teacher (admin user)
-            var teacherGr = new GlideRecord('sys_user');
-            teacherGr.addQuery('sys_user_has_role', '1835f20d83100310345ba730ceaad351'); // admin role sys_id
-            teacherGr.addQuery('active', true);
-            teacherGr.query();
-
+            // Find an available teacher for this slot
             var teacherSysId = '';
-            while (teacherGr.next()) {
-                // Find a teacher not already booked at this slot
+            var roleGr = new GlideRecord('sys_user_has_role');
+            roleGr.addQuery('role', '1835f20d83100310345ba730ceaad351');
+            roleGr.addQuery('user.active', true);
+            roleGr.query();
+            while (roleGr.next()) {
+                var tId = roleGr.getValue('user');
                 var check = new GlideRecord('x_608645_my_comp_0_lesson');
-                check.addQuery('teacher', teacherGr.sys_id);
+                check.addQuery('teacher', tId);
                 check.addQuery('start_time', input.startTime);
                 check.addQuery('status', 'NOT IN', 'no_show');
                 check.query();
-                if (!check.hasNext()) {
-                    teacherSysId = teacherGr.getUniqueValue();
-                    break;
-                }
+                if (!check.hasNext()) { teacherSysId = tId; break; }
             }
 
             if (!teacherSysId) {
                 data.success = false;
-                data.error = 'No available teacher found for this slot.';
+                data.error = 'No available teacher for this slot.';
                 return;
             }
 
             var lesson = new GlideRecord('x_608645_my_comp_0_lesson');
             lesson.initialize();
-            lesson.setValue('student', gs.getUserID());
-            lesson.setValue('teacher', teacherSysId);
+            lesson.setValue('student',    gs.getUserID());
+            lesson.setValue('teacher',    teacherSysId);
             lesson.setValue('start_time', input.startTime);
-            lesson.setValue('end_time', input.endTime);
-            lesson.setValue('status', 'scheduled');
+            lesson.setValue('end_time',   input.endTime);
+            lesson.setValue('status',     'scheduled');
             lesson.insert();
-
             data.success = true;
 
         } catch (e) {
@@ -274,8 +286,6 @@
             data.error = e.toString();
         }
     }
-
-    function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
 })();]]></script>
         <sys_class_name>sp_widget</sys_class_name>
@@ -341,7 +351,7 @@
 
   <div class="booking-confirm" ng-if="c.selectedSlot">
     <strong>Confirm booking:</strong>
-    {{c.weekDates[$index].label}} {{c.selectedSlot.label}}
+    {{c.selectedSlot.date}} {{c.selectedSlot.label}}
     <br/>
     <button class="btn btn-primary btn-sm" style="margin-top:10px;"
       ng-click="c.confirmBooking()" ng-disabled="c.booking">
