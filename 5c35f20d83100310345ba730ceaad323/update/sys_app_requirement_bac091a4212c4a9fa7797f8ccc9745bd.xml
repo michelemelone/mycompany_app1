@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_app_requirement">
+    <sys_app_requirement action="INSERT_OR_UPDATE">
+        <acceptance_criteria>A booking confirmation email is sent to the student immediately after a lesson is created. A reminder email is sent to the teacher when a lesson has homework that has not been updated. Both notifications use scoped email templates.</acceptance_criteria>
+        <application display_value="My Company App1">5c35f20d83100310345ba730ceaad323</application>
+        <description>Configure automated email notifications: (1) Booking Confirmation — triggered on lesson record creation, sent to the student with lesson date/time details; (2) Homework Reminder — triggered when a lesson transitions to Completed state but the homework field is still empty, sent to the assigned teacher. Both notifications must use scoped Notification records within the x_608645_my_comp_0 application.</description>
+        <name>REQ-010: Automated Email Notifications</name>
+        <priority>2</priority>
+        <state>draft</state>
+        <sys_class_name>sys_app_requirement</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:00:00</sys_created_on>
+        <sys_id>bac091a4212c4a9fa7797f8ccc9745bd</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>REQ-010: Automated Email Notifications</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sys_app_requirement_bac091a4212c4a9fa7797f8ccc9745bd</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:00:00</sys_updated_on>
+    </sys_app_requirement>
+</record_update>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_app_requirement">
+    <sys_app_requirement action="INSERT_OR_UPDATE">
+        <acceptance_criteria>Only Mon/Wed/Fri slots are presented to users. Slots outside 4 daily working hours or beyond 3 concurrent teachers are unavailable. Total daily capacity is 12 slots (4 hours x 3 teachers).</acceptance_criteria>
+        <application display_value="My Company App1">5c35f20d83100310345ba730ceaad323</application>
+        <description>Implement the availability engine that drives slot generation. Rules: lessons run Monday, Wednesday, and Friday only; each teacher works 4 hours per day; a maximum of 3 teachers can teach concurrently (one lesson per teacher per slot). Total daily capacity: 12 slots. The engine must be queryable in real time to populate the calendar widget.</description>
+        <name>REQ-005: Teacher Availability Engine</name>
+        <priority>1</priority>
+        <state>draft</state>
+        <sys_class_name>sys_app_requirement</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:00:00</sys_created_on>
+        <sys_id>20d0521b11db4d2fa2912c19c3b5e91d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>REQ-005: Teacher Availability Engine</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sys_app_requirement_20d0521b11db4d2fa2912c19c3b5e91d</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:00:00</sys_updated_on>
+    </sys_app_requirement>
+</record_update>

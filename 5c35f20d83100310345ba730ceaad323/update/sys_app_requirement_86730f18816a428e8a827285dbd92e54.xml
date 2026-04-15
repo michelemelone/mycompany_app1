@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_app_requirement">
+    <sys_app_requirement action="INSERT_OR_UPDATE">
+        <acceptance_criteria>Teachers can view only their assigned lessons. They can update the lesson status (Attended, No-show), save a lesson summary, and input homework. Changes are persisted on the lesson record.</acceptance_criteria>
+        <application display_value="My Company App1">5c35f20d83100310345ba730ceaad323</application>
+        <description>Provide a backend workspace (native UI) for teachers with the admin role to manage their assigned lessons. Required actions: update lesson status (e.g., Attended, No-show), input a lesson summary (what was discussed), and input assigned homework. This workspace is not accessible from the student portal.</description>
+        <name>REQ-006: Teacher Lesson Management Workspace</name>
+        <priority>1</priority>
+        <state>draft</state>
+        <sys_class_name>sys_app_requirement</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:00:00</sys_created_on>
+        <sys_id>86730f18816a428e8a827285dbd92e54</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>REQ-006: Teacher Lesson Management Workspace</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sys_app_requirement_86730f18816a428e8a827285dbd92e54</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:00:00</sys_updated_on>
+    </sys_app_requirement>
+</record_update>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_app_requirement">
+    <sys_app_requirement action="INSERT_OR_UPDATE">
+        <acceptance_criteria>After a lesson transitions to Completed state, the student sees a feedback form on the portal. The form accepts a star rating and free-text comments. Submitted feedback is stored on the lesson record.</acceptance_criteria>
+        <application display_value="My Company App1">5c35f20d83100310345ba730ceaad323</application>
+        <description>Provide a post-lesson feedback interface accessible to the student once a lesson record reaches the Completed state. The interface must allow the student to submit a numeric/star rating and free-text comments. Feedback is stored in the student_feedback field on the lesson record (x_german_lesson table).</description>
+        <name>REQ-004: Student Feedback Interface</name>
+        <priority>2</priority>
+        <state>draft</state>
+        <sys_class_name>sys_app_requirement</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:00:00</sys_created_on>
+        <sys_id>0e45ba0bfaf1408ebcfeba62f3ac0326</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>REQ-004: Student Feedback Interface</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sys_app_requirement_0e45ba0bfaf1408ebcfeba62f3ac0326</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:00:00</sys_updated_on>
+    </sys_app_requirement>
+</record_update>

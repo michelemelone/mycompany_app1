@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_app_requirement">
+    <sys_app_requirement action="INSERT_OR_UPDATE">
+        <acceptance_criteria>Attempting to insert a second lesson for the same student in the same ISO week is blocked server-side with a descriptive error. The rule fires on Before Insert and cannot be bypassed from the portal.</acceptance_criteria>
+        <application display_value="My Company App1">5c35f20d83100310345ba730ceaad323</application>
+        <description>Implement Business Rules (Before Insert) on the x_german_lesson table to enforce the 1-lesson-per-week constraint server-side. The rule must check whether the inserting student already has a lesson record within the same ISO week (using start_time) and abort the insert with a user-friendly error message if a duplicate is found.</description>
+        <name>REQ-007: Weekly Limit Validation Business Rule</name>
+        <priority>1</priority>
+        <state>draft</state>
+        <sys_class_name>sys_app_requirement</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:00:00</sys_created_on>
+        <sys_id>b2f28cc9f3744a11aa1c60370e40113d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>REQ-007: Weekly Limit Validation Business Rule</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sys_app_requirement_b2f28cc9f3744a11aa1c60370e40113d</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:00:00</sys_updated_on>
+    </sys_app_requirement>
+</record_update>

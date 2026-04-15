@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_app_requirement">
+    <sys_app_requirement action="INSERT_OR_UPDATE">
+        <acceptance_criteria>The x_german_lesson table (or scoped equivalent) exists with all specified fields: student, teacher, start_time, end_time, summary, homework, student_feedback. References to sys_user are correctly typed. The table is scoped to x_608645_my_comp_0.</acceptance_criteria>
+        <application display_value="My Company App1">5c35f20d83100310345ba730ceaad323</application>
+        <description>Create the core lesson data table (scoped name: x_608645_my_comp_0_lesson, logical name: x_german_lesson). Required fields: student (Reference: sys_user), teacher (Reference: sys_user, restricted to admin role), start_time (Date/Time), end_time (Date/Time), summary (HTML/Long text), homework (HTML/Long text), student_feedback (String/Rating). The table may extend Task or be standalone.</description>
+        <name>REQ-008: Lesson Table Data Architecture</name>
+        <priority>1</priority>
+        <state>draft</state>
+        <sys_class_name>sys_app_requirement</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:00:00</sys_created_on>
+        <sys_id>7bab6656a425400485e5ff9c575f948d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>REQ-008: Lesson Table Data Architecture</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sys_app_requirement_7bab6656a425400485e5ff9c575f948d</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:00:00</sys_updated_on>
+    </sys_app_requirement>
+</record_update>
