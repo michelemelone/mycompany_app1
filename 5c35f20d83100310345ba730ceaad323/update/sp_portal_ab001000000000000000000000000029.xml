@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_portal">
+    <sp_portal action="INSERT_OR_UPDATE">
+        <analytics_root/>
+        <browser_title>German Language Learning Portal</browser_title>
+        <catalog/>
+        <catalog_home_page/>
+        <css_variables/>
+        <default_page display_value="german_learning_portal">ab001000000000000000000000000022</default_page>
+        <description>Corporate German Language Learning Portal</description>
+        <enable_context_search>false</enable_context_search>
+        <favicon/>
+        <force_https>true</force_https>
+        <homepage display_value="german_learning_portal">ab001000000000000000000000000022</homepage>
+        <kb_knowledge_base/>
+        <login_page>login</login_page>
+        <logo/>
+        <max_search_results>20</max_search_results>
+        <notif_page/>
+        <quick_start_config/>
+        <sc_catalog/>
+        <search_page/>
+        <sys_class_name>sp_portal</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:13:34</sys_created_on>
+        <sys_id>ab001000000000000000000000000029</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>german</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sp_portal_ab001000000000000000000000000029</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:13:34</sys_updated_on>
+        <theme/>
+        <title>German Language Learning Portal</title>
+        <url_suffix>german</url_suffix>
+    </sp_portal>
+</record_update>
