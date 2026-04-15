@@ -7,8 +7,8 @@
         <draft>false</draft>
         <id>german_learning_portal</id>
         <internal>false</internal>
-        <public>false</public>
-        <roles>x_608645_my_comp_0.user</roles>
+        <public>true</public>
+        <roles/>
         <short_description>German Lesson Booking Portal</short_description>
         <sys_class_name>sp_page</sys_class_name>
         <sys_created_by>admin</sys_created_by>

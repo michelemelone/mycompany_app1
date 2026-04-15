@@ -90,7 +90,7 @@
         <id>german_lesson_feedback</id>
         <internal>false</internal>
         <name>German Lesson Feedback</name>
-        <roles>x_608645_my_comp_0.user</roles>
+        <roles/>
         <script><![CDATA[(function() {
     var action = input ? input.action : null;
 
