@@ -31,7 +31,7 @@
         <sys_update_name>sp_portal_ab001000000000000000000000000029</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
         <sys_updated_on>2026-04-15 15:13:34</sys_updated_on>
-        <theme/>
+        <theme display_value="Stock">2779b6b3c0a8016b00c9f14e1caacde8</theme>
         <title>German Language Learning Portal</title>
         <url_suffix>german</url_suffix>
     </sp_portal>
