@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl">
+    <sys_security_acl action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <admin_overrides>true</admin_overrides>
+        <advanced>true</advanced>
+        <condition/>
+        <description>Only admins (teachers) can write/update lesson records; students can write feedback fields when status=completed</description>
+        <name>x_608645_my_comp_0_lesson</name>
+        <operation>write</operation>
+        <role_allows_exact_match>false</role_allows_exact_match>
+        <script><![CDATA[if (gs.hasRole('x_608645_my_comp_0.admin')) {
+    answer = true;
+} else if (current.student == gs.getUserID() && current.status == 'completed') {
+    // Students can add feedback on completed lessons
+    answer = true;
+} else {
+    answer = false;
+}]]></script>
+        <sys_class_name>sys_security_acl</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:13:34</sys_created_on>
+        <sys_id>ab001000000000000000000000000016</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_608645_my_comp_0_lesson.None.write</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sys_security_acl_ab001000000000000000000000000016</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:13:34</sys_updated_on>
+        <type>record</type>
+    </sys_security_acl>
+</record_update>

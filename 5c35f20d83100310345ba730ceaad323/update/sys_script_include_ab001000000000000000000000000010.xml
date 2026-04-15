@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_608645_my_comp_0.LessonAvailability</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description>Checks real-time lesson slot availability and weekly booking limits</description>
+        <name>LessonAvailability</name>
+        <script><![CDATA[var LessonAvailability = Class.create();
+LessonAvailability.prototype = {
+    initialize: function() {},
+
+    /**
+     * Returns true if fewer than 3 teachers are booked at the given slot.
+     * @param {string} startTime - GlideDateTime value (UTC)
+     * @param {string} endTime   - GlideDateTime value (UTC)
+     */
+    isSlotAvailable: function(startTime, endTime) {
+        var gr = new GlideRecord('x_608645_my_comp_0_lesson');
+        gr.addQuery('start_time', startTime);
+        gr.addQuery('end_time', endTime);
+        gr.addQuery('status', 'NOT IN', 'no_show');
+        gr.query();
+        return gr.getRowCount() < 3;
+    },
+
+    /**
+     * Returns true if student already has a lesson in the current ISO week.
+     * @param {string} studentSysId
+     */
+    hasStudentBookedThisWeek: function(studentSysId) {
+        var weekStart = gs.beginningOfThisWeek();
+        var weekEnd   = gs.endOfThisWeek();
+
+        var gr = new GlideRecord('x_608645_my_comp_0_lesson');
+        gr.addQuery('student', studentSysId);
+        gr.addQuery('start_time', '>=', weekStart);
+        gr.addQuery('start_time', '<=', weekEnd);
+        gr.addQuery('status', 'NOT IN', 'no_show');
+        gr.query();
+        return gr.hasNext();
+    },
+
+    /**
+     * Returns available slot objects for a given date (Mon/Wed/Fri only).
+     * Slots are 09:00–10:00, 10:00–11:00, 11:00–12:00, 13:00–14:00 (4h/day).
+     * @param {string} date - display date string (YYYY-MM-DD)
+     * @returns {Array} array of {start, end} objects or empty if not a valid day
+     */
+    getAvailableSlots: function(date) {
+        var gd = new GlideDateTime();
+        gd.setDisplayValue(date + ' 00:00:00');
+
+        // getDayOfWeekLocalTime: 1=Sun,2=Mon,3=Tue,4=Wed,5=Thu,6=Fri,7=Sat
+        var dow = gd.getDayOfWeekLocalTime();
+        if (dow !== 2 && dow !== 4 && dow !== 6) return []; // Mon/Wed/Fri only
+
+        var startHours = [9, 10, 11, 13]; // 4 hours/day (skip lunch)
+        var slots = [];
+
+        for (var i = 0; i < startHours.length; i++) {
+            var slotStart = new GlideDateTime();
+            slotStart.setDisplayValue(date + ' ' + startHours[i] + ':00:00');
+            var slotEnd = new GlideDateTime(slotStart);
+            slotEnd.addSeconds(3600);
+
+            if (this.isSlotAvailable(slotStart.getValue(), slotEnd.getValue())) {
+                slots.push({
+                    start: slotStart.getDisplayValue(),
+                    end:   slotEnd.getDisplayValue(),
+                    startValue: slotStart.getValue(),
+                    endValue:   slotEnd.getValue()
+                });
+            }
+        }
+        return slots;
+    },
+
+    type: 'LessonAvailability'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:13:34</sys_created_on>
+        <sys_id>ab001000000000000000000000000010</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>LessonAvailability</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sys_script_include_ab001000000000000000000000000010</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:13:34</sys_updated_on>
+    </sys_script_include>
+</record_update>

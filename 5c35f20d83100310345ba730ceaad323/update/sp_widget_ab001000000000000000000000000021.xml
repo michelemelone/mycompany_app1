@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <client_script><![CDATA[function($scope, $http, spUtil) {
+    var c = this;
+    c.lessons = [];
+    c.submitting = false;
+    c.message = '';
+    c.messageType = '';
+
+    c.setRating = function(lesson, rating) {
+        lesson.selectedRating = rating;
+    };
+
+    c.submitFeedback = function(lesson) {
+        if (!lesson.selectedRating) {
+            spUtil.addErrorMessage('Please select a rating.');
+            return;
+        }
+        c.submitting = true;
+        c.server.get({
+            action: 'submitFeedback',
+            lessonId: lesson.sys_id,
+            rating: lesson.selectedRating,
+            feedback: lesson.feedbackText || ''
+        }).then(function(r) {
+            c.submitting = false;
+            if (r.data.success) {
+                lesson.submitted = true;
+                c.messageType = 'success';
+                c.message = 'Thank you for your feedback!';
+            } else {
+                spUtil.addErrorMessage(r.data.error);
+            }
+        });
+    };
+}]]></client_script>
+        <css><![CDATA[.feedback-widget h3 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+.lesson-card {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+.lesson-card .lesson-meta {
+    font-size: 13px;
+    color: #6c757d;
+    margin-bottom: 12px;
+}
+.lesson-card .lesson-meta strong {
+    color: #212529;
+}
+.star-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+.star-btn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #dee2e6;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.1s;
+}
+.star-btn.active {
+    color: #f0a500;
+}
+.star-btn:hover {
+    color: #f0a500;
+}
+.feedback-done {
+    color: #28a745;
+    font-weight: 600;
+    font-size: 14px;
+}
+.no-lessons {
+    color: #6c757d;
+    font-style: italic;
+    padding: 20px 0;
+    text-align: center;
+}]]></css>
+        <description>Post-lesson feedback form: students rate and comment on completed lessons</description>
+        <id>german_lesson_feedback</id>
+        <internal>false</internal>
+        <name>German Lesson Feedback</name>
+        <roles>x_608645_my_comp_0.user</roles>
+        <script><![CDATA[(function() {
+    var action = input ? input.action : null;
+
+    if (!action) {
+        // Load completed lessons for current user without feedback
+        var gr = new GlideRecord('x_608645_my_comp_0_lesson');
+        gr.addQuery('student', gs.getUserID());
+        gr.addQuery('status', 'completed');
+        gr.addQuery('feedback_rating', '');
+        gr.orderByDesc('start_time');
+        gr.query();
+
+        data.lessons = [];
+        while (gr.next()) {
+            data.lessons.push({
+                sys_id: gr.getUniqueValue(),
+                teacher: gr.teacher.getDisplayValue(),
+                start_time: gr.getDisplayValue('start_time'),
+                end_time: gr.getDisplayValue('end_time'),
+                summary: gr.getValue('summary') || ''
+            });
+        }
+
+    } else if (action === 'submitFeedback') {
+        try {
+            var gr = new GlideRecord('x_608645_my_comp_0_lesson');
+            if (gr.get(input.lessonId) && gr.getValue('student') == gs.getUserID()) {
+                gr.setValue('feedback_rating', input.rating);
+                gr.setValue('student_feedback', input.feedback);
+                gr.update();
+                data.success = true;
+            } else {
+                data.success = false;
+                data.error = 'Lesson not found or access denied.';
+            }
+        } catch (e) {
+            data.success = false;
+            data.error = e.toString();
+        }
+    }
+})();]]></script>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:13:34</sys_created_on>
+        <sys_id>ab001000000000000000000000000021</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>German Lesson Feedback</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sp_widget_ab001000000000000000000000000021</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:13:34</sys_updated_on>
+        <template><![CDATA[<div class="feedback-widget">
+  <h3>Rate Your Lessons</h3>
+
+  <div ng-if="c.message" class="alert alert-{{c.messageType}}">{{c.message}}</div>
+
+  <div class="no-lessons" ng-if="c.data.lessons.length === 0">
+    No completed lessons pending feedback.
+  </div>
+
+  <div class="lesson-card" ng-repeat="lesson in c.data.lessons" ng-if="!lesson.submitted">
+    <div class="lesson-meta">
+      <strong>Teacher:</strong> {{lesson.teacher}}<br/>
+      <strong>Date:</strong> {{lesson.start_time}} – {{lesson.end_time}}
+    </div>
+
+    <div ng-if="lesson.summary" style="margin-bottom:12px;">
+      <strong>Lesson Summary:</strong>
+      <p ng-bind-html="lesson.summary" style="margin:4px 0 0 0; font-size:13px;"></p>
+    </div>
+
+    <label style="font-weight:600; font-size:13px;">Your Rating</label>
+    <div class="star-row">
+      <button class="star-btn"
+        ng-repeat="star in [1,2,3,4,5]"
+        ng-class="{'active': star <= lesson.selectedRating}"
+        ng-click="c.setRating(lesson, star)">&#9733;</button>
+    </div>
+
+    <div class="form-group">
+      <label for="feedback-{{lesson.sys_id}}" style="font-size:13px; font-weight:600;">Comments (optional)</label>
+      <textarea id="feedback-{{lesson.sys_id}}" class="form-control" rows="3"
+        ng-model="lesson.feedbackText"
+        placeholder="Share your thoughts about this lesson..."></textarea>
+    </div>
+
+    <button class="btn btn-primary btn-sm"
+      ng-click="c.submitFeedback(lesson)"
+      ng-disabled="c.submitting || !lesson.selectedRating">
+      <span ng-if="c.submitting" class="fa fa-spinner fa-spin"></span>
+      Submit Feedback
+    </button>
+  </div>
+
+  <div class="lesson-card" ng-repeat="lesson in c.data.lessons" ng-if="lesson.submitted">
+    <div class="feedback-done">
+      <span class="fa fa-check-circle"></span> Feedback submitted for {{lesson.start_time}}
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

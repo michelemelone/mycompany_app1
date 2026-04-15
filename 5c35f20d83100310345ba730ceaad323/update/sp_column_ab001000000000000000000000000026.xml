@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_column">
+    <sp_column action="INSERT_OR_UPDATE">
+        <order>200</order>
+        <row display_value="ab001000000000000000000000000024">ab001000000000000000000000000024</row>
+        <size_md>4</size_md>
+        <size_sm>12</size_sm>
+        <size_xs>12</size_xs>
+        <sys_class_name>sp_column</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:13:34</sys_created_on>
+        <sys_id>ab001000000000000000000000000026</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>ab001000000000000000000000000026</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sp_column_ab001000000000000000000000000026</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:13:34</sys_updated_on>
+    </sp_column>
+</record_update>

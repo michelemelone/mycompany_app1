@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sysevent_email_action">
+    <sysevent_email_action action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <advanced_condition/>
+        <body_template><![CDATA[Dear ${student.first_name},
+
+Your teacher ${teacher.name} has updated your German lesson with new homework.
+
+Lesson Date: ${start_time}
+
+--- LESSON SUMMARY ---
+${summary}
+
+--- HOMEWORK ---
+${homework}
+
+Please complete your homework before the next lesson.
+
+Best regards,
+German Language Learning Portal]]></body_template>
+        <collection>x_608645_my_comp_0_lesson</collection>
+        <condition>homework_changesTRUE^ORsummary_changesTRUE</condition>
+        <content_type>text/plain</content_type>
+        <default_interval>0</default_interval>
+        <delivery_band/>
+        <description>Notifies student when teacher updates lesson summary or homework</description>
+        <digest_from/>
+        <digest_html/>
+        <digest_separator_html/>
+        <digest_separator_text/>
+        <digest_template/>
+        <event_name/>
+        <event_parm_1/>
+        <event_parm_2/>
+        <exclude_delegates>false</exclude_delegates>
+        <fire_order>100</fire_order>
+        <from/>
+        <importance/>
+        <inactivity_count>0</inactivity_count>
+        <inactivity_trigger/>
+        <internal>false</internal>
+        <mandatory>false</mandatory>
+        <message_html/>
+        <message_text/>
+        <name>German Lesson - Homework Updated</name>
+        <omit_watermark>false</omit_watermark>
+        <order>100</order>
+        <priority>0</priority>
+        <push_message_template/>
+        <recipient_fields>student</recipient_fields>
+        <recipient_groups/>
+        <recipient_users/>
+        <reply_to/>
+        <send_self>false</send_self>
+        <style/>
+        <subject>New Homework for Your German Lesson on ${start_time}</subject>
+        <subs_override/>
+        <sys_class_name>sysevent_email_action</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:13:34</sys_created_on>
+        <sys_id>ab001000000000000000000000000013</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>German Lesson - Homework Updated</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sysevent_email_action_ab001000000000000000000000000013</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:13:34</sys_updated_on>
+        <template/>
+        <type>field-based</type>
+        <weight>0</weight>
+        <when>update</when>
+    </sysevent_email_action>
+</record_update>

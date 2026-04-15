@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_page">
+    <sp_page action="INSERT_OR_UPDATE">
+        <acl/>
+        <category>general</category>
+        <css/>
+        <description>German Language Learning Portal – student landing page</description>
+        <draft>false</draft>
+        <id>german_learning_portal</id>
+        <internal>false</internal>
+        <public>false</public>
+        <roles>x_608645_my_comp_0.user</roles>
+        <short_description>German Lesson Booking Portal</short_description>
+        <sys_class_name>sp_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:13:34</sys_created_on>
+        <sys_id>ab001000000000000000000000000022</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>german_learning_portal</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sp_page_ab001000000000000000000000000022</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:13:34</sys_updated_on>
+        <title>German Language Learning Portal</title>
+    </sp_page>
+</record_update>

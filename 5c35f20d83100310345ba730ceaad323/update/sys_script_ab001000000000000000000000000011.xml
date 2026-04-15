@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>false</action_query>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_608645_my_comp_0_lesson</collection>
+        <condition/>
+        <description>Enforces: 1 lesson/week per student, max 3 concurrent bookings per slot, Mon/Wed/Fri only</description>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Lesson Booking Validation</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_variables/>
+        <rest_when/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+
+    // 1. Enforce Mon/Wed/Fri only
+    var startDt = new GlideDateTime(current.getValue('start_time'));
+    var dow = startDt.getDayOfWeekLocalTime(); // 1=Sun,2=Mon,3=Tue,4=Wed,5=Thu,6=Fri,7=Sat
+    if (dow !== 2 && dow !== 4 && dow !== 6) {
+        current.setAbortAction(true);
+        gs.addErrorMessage('Lessons can only be booked on Monday, Wednesday, or Friday.');
+        return;
+    }
+
+    var availability = new x_608645_my_comp_0.LessonAvailability();
+
+    // 2. Enforce 1 lesson/week per student
+    if (availability.hasStudentBookedThisWeek(current.getValue('student'))) {
+        current.setAbortAction(true);
+        gs.addErrorMessage('You already have a lesson booked this week. Maximum one lesson per week is allowed.');
+        return;
+    }
+
+    // 3. Enforce max 3 concurrent bookings (3 teachers)
+    if (!availability.isSlotAvailable(current.getValue('start_time'), current.getValue('end_time'))) {
+        current.setAbortAction(true);
+        gs.addErrorMessage('This time slot is fully booked. All 3 teachers are occupied. Please choose another slot.');
+    }
+
+})(current, previous);]]></script>
+        <template/>
+        <when>before</when>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:13:34</sys_created_on>
+        <sys_id>ab001000000000000000000000000011</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Lesson Booking Validation</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sys_script_ab001000000000000000000000000011</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:13:34</sys_updated_on>
+    </sys_script>
+</record_update>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_container">
+    <sp_container action="INSERT_OR_UPDATE">
+        <background_color/>
+        <bootstrap_alt>false</bootstrap_alt>
+        <order>100</order>
+        <page display_value="german_learning_portal">ab001000000000000000000000000022</page>
+        <sys_class_name>sp_container</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:13:34</sys_created_on>
+        <sys_id>ab001000000000000000000000000023</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>ab001000000000000000000000000023</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sp_container_ab001000000000000000000000000023</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:13:34</sys_updated_on>
+        <title>Main</title>
+        <width>container</width>
+    </sp_container>
+</record_update>

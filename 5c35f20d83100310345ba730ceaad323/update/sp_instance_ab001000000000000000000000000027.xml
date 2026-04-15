@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_instance">
+    <sp_instance action="INSERT_OR_UPDATE">
+        <column display_value="ab001000000000000000000000000025">ab001000000000000000000000000025</column>
+        <css/>
+        <hide_title>false</hide_title>
+        <order>100</order>
+        <sp_widget display_value="German Lesson Booking Calendar">ab001000000000000000000000000020</sp_widget>
+        <sys_class_name>sp_instance</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:13:34</sys_created_on>
+        <sys_id>ab001000000000000000000000000027</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>ab001000000000000000000000000027</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sp_instance_ab001000000000000000000000000027</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:13:34</sys_updated_on>
+        <title>Book a Lesson</title>
+    </sp_instance>
+</record_update>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_dictionary">
+    <sys_dictionary action="INSERT_OR_UPDATE">
+        <array>false</array>
+        <attributes/>
+        <audit>false</audit>
+        <calculated>false</calculated>
+        <choice>0</choice>
+        <choice_field/>
+        <choice_table/>
+        <column_label>Student</column_label>
+        <comments/>
+        <create_roles/>
+        <defaultsort>0</defaultsort>
+        <delete_roles/>
+        <dependent/>
+        <dependent_on_field/>
+        <display>true</display>
+        <dynamic_creation>false</dynamic_creation>
+        <dynamic_creation_script/>
+        <dynamic_default_value/>
+        <dynamic_ref_qual/>
+        <element>student</element>
+        <element_reference>false</element_reference>
+        <foreign_database/>
+        <function_definition/>
+        <function_field>false</function_field>
+        <hint/>
+        <internal_type display_value="Reference">reference</internal_type>
+        <label>Student</label>
+        <language/>
+        <mandatory>true</mandatory>
+        <max_length>32</max_length>
+        <model_id/>
+        <name>x_608645_my_comp_0_lesson</name>
+        <next_element/>
+        <no_sort>false</no_sort>
+        <password2>false</password2>
+        <peer_list/>
+        <primary>false</primary>
+        <read_only>false</read_only>
+        <read_roles/>
+        <reference display_value="User [sys_user]">sys_user</reference>
+        <reference_cascade_rule/>
+        <reference_floats>false</reference_floats>
+        <reference_key/>
+        <reference_qual/>
+        <reference_qual_condition/>
+        <reference_type/>
+        <sizeclass>0</sizeclass>
+        <spell_check>false</spell_check>
+        <staged>false</staged>
+        <table_reference>false</table_reference>
+        <text_index>false</text_index>
+        <unique>false</unique>
+        <use_dependent_field>false</use_dependent_field>
+        <use_dynamic_default>false</use_dynamic_default>
+        <use_reference_qualifier>simple</use_reference_qualifier>
+        <virtual>false</virtual>
+        <widget/>
+        <write_roles/>
+        <xml_view>false</xml_view>
+        <sys_class_name>sys_dictionary</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 15:13:34</sys_created_on>
+        <sys_id>ab001000000000000000000000000003</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_608645_my_comp_0_lesson.student</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sys_dictionary_ab001000000000000000000000000003</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 15:13:34</sys_updated_on>
+    </sys_dictionary>
+</record_update>
