@@ -4,6 +4,7 @@
         <assessable>false</assessable>
         <device_type>browser</device_type>
         <filter>status=scheduled^ORORstatus=attended</filter>
+        <title>Lessons</title>
         <homepage>false</homepage>
         <link_type>LIST</link_type>
         <name>Lessons</name>

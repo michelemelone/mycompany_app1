@@ -2,7 +2,7 @@
     <sp_column action="INSERT_OR_UPDATE">
         <order>100</order>
         <row display_value="ab001000000000000000000000000024">ab001000000000000000000000000024</row>
-        <size_md>8</size_md>
+        <size_md>12</size_md>
         <size_sm>12</size_sm>
         <size_xs>12</size_xs>
         <sys_class_name>sp_column</sys_class_name>

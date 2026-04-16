@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <client_script><![CDATA[]]></client_script>
+        <css><![CDATA[.react-portal-frame {
+    width: 100%;
+    min-height: 85vh;
+    border: none;
+    display: block;
+}]]></css>
+        <description>Iframe wrapper that loads the React-based German Learning Portal (german_learning.do) inside the Service Portal page</description>
+        <id>german_learning_react_wrapper</id>
+        <internal>false</internal>
+        <name>German Learning React Portal</name>
+        <roles/>
+        <script><![CDATA[]]></script>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-16 10:00:00</sys_created_on>
+        <sys_id>ab001000000000000000000000000060</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>German Learning React Portal</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sp_widget_ab001000000000000000000000000060</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-16 10:00:00</sys_updated_on>
+        <template><![CDATA[<div>
+  <iframe class="react-portal-frame" src="/german_learning.do" title="German Language Learning Portal"></iframe>
+</div>]]></template>
+    </sp_widget>
+</record_update>
