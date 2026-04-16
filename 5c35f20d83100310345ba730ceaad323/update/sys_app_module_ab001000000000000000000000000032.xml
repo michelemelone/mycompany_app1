@@ -23,7 +23,7 @@
         <sys_updated_by>admin</sys_updated_by>
         <sys_updated_on>2026-04-16 00:00:00</sys_updated_on>
         <table/>
-        <url>/$sp.do?id=german_learning_portal</url>
+        <url>/german_learning.do</url>
         <window>_blank</window>
     </sys_app_module>
 </record_update>

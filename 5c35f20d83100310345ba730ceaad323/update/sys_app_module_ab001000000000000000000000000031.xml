@@ -3,7 +3,7 @@
         <application display_value="My Company App1">ab001000000000000000000000000030</application>
         <assessable>false</assessable>
         <device_type>browser</device_type>
-        <filter/>
+        <filter>status=scheduled^ORORstatus=attended</filter>
         <homepage>false</homepage>
         <link_type>LIST</link_type>
         <name>Lessons</name>

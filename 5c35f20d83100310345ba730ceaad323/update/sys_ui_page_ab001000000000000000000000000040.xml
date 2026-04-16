@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script><![CDATA[]]></client_script>
+        <description>German Language Learning Portal - React Frontend</description>
+        <direct>true</direct>
+        <endpoint>german_learning.do</endpoint>
+        <html><![CDATA[<div id="german-app" style="min-height:400px;"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" crossorigin="anonymous"/>
+
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
+var useState = React.useState;
+var useEffect = React.useEffect;
+
+var SLOTS_URL  = '/api/x_608645_my_comp_0/v1/slots';
+var BOOK_URL   = '/api/x_608645_my_comp_0/v1/book';
+var TABLE_URL  = '/api/now/table/x_608645_my_comp_0_lesson';
+
+function apiCall(url, opts) {
+    var headers = { 'Content-Type': 'application/json' };
+    if (window.g_ck) { headers['X-UserToken'] = window.g_ck; }
+    var merged = Object.assign({ headers: headers }, opts || {});
+    return fetch(url, merged).then(function(r) { return r.json(); });
+}
+
+function getSlots(dates) {
+    return apiCall(SLOTS_URL + '?dates=' + dates.join(','));
+}
+
+function bookLesson(startTime, endTime) {
+    return apiCall(BOOK_URL, {
+        method: 'POST',
+        body: JSON.stringify({ startTime: startTime, endTime: endTime })
+    });
+}
+
+function getLessons() {
+    var uid = (window.g_user && window.g_user.userID) ? window.g_user.userID : '';
+    var q = encodeURIComponent('student=' + uid + '^status=attended^feedback_ratingISEMPTY^ORDERBYDESCstart_time');
+    var fields = encodeURIComponent('sys_id,start_time,end_time,teacher,summary');
+    return apiCall(TABLE_URL + '?sysparm_query=' + q + '&sysparm_fields=' + fields + '&sysparm_display_value=true')
+        .then(function(d) { return d.result || []; });
+}
+
+function submitFeedback(sysId, rating, feedback) {
+    return apiCall(TABLE_URL + '/' + sysId, {
+        method: 'PATCH',
+        body: JSON.stringify({ feedback_rating: String(rating), student_feedback: feedback })
+    });
+}
+
+var DAY_LABELS  = ['Monday', 'Wednesday', 'Friday'];
+var DAY_OFFSETS = [0, 2, 4];
+
+function getWeekDates(offset) {
+    var now = new Date();
+    now.setDate(now.getDate() + offset * 7);
+    var dow = now.getDay();
+    var monday = new Date(now);
+    monday.setDate(now.getDate() - ((dow + 6) % 7));
+    return DAY_OFFSETS.map(function(off, i) {
+        var d = new Date(monday);
+        d.setDate(monday.getDate() + off);
+        return {
+            label:   DAY_LABELS[i],
+            date:    d.toISOString().split('T')[0],
+            display: d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+        };
+    });
+}
+
+function BookingCalendar() {
+    var weekOffsetState   = useState(0);
+    var weekOffset        = weekOffsetState[0];
+    var setWeekOffset     = weekOffsetState[1];
+    var dataState         = useState({ slots: [], alreadyBooked: false });
+    var data              = dataState[0];
+    var setData           = dataState[1];
+    var selectedState     = useState(null);
+    var selected          = selectedState[0];
+    var setSelected       = selectedState[1];
+    var loadingState      = useState(true);
+    var loading           = loadingState[0];
+    var setLoading        = loadingState[1];
+    var bookingState      = useState(false);
+    var booking           = bookingState[0];
+    var setBooking        = bookingState[1];
+    var msgState          = useState(null);
+    var msg               = msgState[0];
+    var setMsg            = msgState[1];
+    var refreshKeyState   = useState(0);
+    var refreshKey        = refreshKeyState[0];
+    var setRefreshKey     = refreshKeyState[1];
+
+    var weekDates = getWeekDates(weekOffset);
+    var weekLabel = weekDates[0].display + ' - ' + weekDates[2].display;
+
+    useEffect(function() {
+        setLoading(true);
+        setSelected(null);
+        getSlots(weekDates.map(function(d) { return d.date; }))
+            .then(function(d) { setData(d); })
+            .catch(function() { setMsg({ type: 'danger', text: 'Could not load slots.' }); })
+            .finally(function() { setLoading(false); });
+    }, [weekOffset, refreshKey]);
+
+    function slotsFor(date) {
+        return (data.slots || []).filter(function(s) { return s.date === date; });
+    }
+
+    function handleBook() {
+        if (!selected) { return; }
+        setBooking(true);
+        bookLesson(selected.startValue, selected.endValue)
+            .then(function(res) {
+                if (res.success || res.sys_id) {
+                    setMsg({ type: 'success', text: 'Lesson booked! Confirmation email sent.' });
+                    setSelected(null);
+                    setRefreshKey(function(k) { return k + 1; });
+                } else {
+                    setMsg({ type: 'danger', text: res.error || 'Booking failed.' });
+                }
+            })
+            .catch(function() { setMsg({ type: 'danger', text: 'Network error.' }); })
+            .finally(function() { setBooking(false); });
+    }
+
+    return (
+        <div>
+            <div className="d-flex align-items-center justify-content-between mb-3">
+                <button className="btn btn-outline-secondary btn-sm"
+                    onClick={function() { setWeekOffset(function(w) { return w - 1; }); }}>
+                    &lsaquo; Prev
+                </button>
+                <strong>{weekLabel}</strong>
+                <button className="btn btn-outline-secondary btn-sm"
+                    onClick={function() { setWeekOffset(function(w) { return w + 1; }); }}>
+                    Next &rsaquo;
+                </button>
+            </div>
+
+            {data.alreadyBooked && (
+                <div className="alert alert-warning py-2 small mb-3">
+                    You already have a lesson booked this week.
+                </div>
+            )}
+
+            {msg && (
+                <div className={"alert alert-" + msg.type + " py-2 small mb-3"}>
+                    {msg.text}
+                    <button type="button" className="btn-close float-end" style={{fontSize:'10px'}}
+                        onClick={function() { setMsg(null); }}></button>
+                </div>
+            )}
+
+            {loading ? (
+                <div className="text-center py-4 text-muted">
+                    <span className="spinner-border spinner-border-sm me-2" role="status"></span>Loading...
+                </div>
+            ) : (
+                <div className="row g-2">
+                    {weekDates.map(function(day) {
+                        var daySlots = slotsFor(day.date);
+                        return (
+                            <div key={day.date} className="col-md-4">
+                                <div className="card h-100">
+                                    <div className="card-header bg-primary text-white text-center py-2">
+                                        <div className="fw-semibold" style={{fontSize:'13px'}}>{day.label}</div>
+                                        <div className="opacity-75" style={{fontSize:'11px'}}>{day.display}</div>
+                                    </div>
+                                    <div className="card-body p-2">
+                                        {daySlots.length === 0 ? (
+                                            <div className="text-muted text-center small py-2">No slots</div>
+                                        ) : daySlots.map(function(slot) {
+                                            var isSelected = selected === slot;
+                                            var isFull     = !slot.available;
+                                            var isLocked   = data.alreadyBooked && slot.available;
+                                            var cls = 'btn btn-sm w-100 mb-1 ';
+                                            if (isSelected)  { cls += 'btn-primary'; }
+                                            else if (isFull) { cls += 'btn-outline-danger'; }
+                                            else if (isLocked) { cls += 'btn-outline-secondary'; }
+                                            else { cls += 'btn-outline-success'; }
+                                            return (
+                                                <button key={slot.startValue} className={cls}
+                                                    style={{fontSize:'12px'}}
+                                                    disabled={isFull || isLocked}
+                                                    onClick={function() {
+                                                        if (!isFull && !isLocked) {
+                                                            setSelected(function(s) { return s === slot ? null : slot; });
+                                                        }
+                                                    }}>
+                                                    {slot.label}
+                                                    {isFull ? ' \u2717' : (isSelected ? ' \u2713' : '')}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
+
+            {selected && (
+                <div className="card mt-3 border-primary">
+                    <div className="card-body py-3">
+                        <strong>Confirm booking:</strong> {selected.date} {selected.label}
+                        <div className="mt-2">
+                            <button className="btn btn-primary btn-sm me-2"
+                                onClick={handleBook} disabled={booking}>
+                                {booking ? 'Booking...' : 'Confirm Booking'}
+                            </button>
+                            <button className="btn btn-outline-secondary btn-sm"
+                                onClick={function() { setSelected(null); }}>
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
+function FeedbackPanel() {
+    var lessonsState   = useState([]);
+    var lessons        = lessonsState[0];
+    var setLessons     = lessonsState[1];
+    var loadingState   = useState(true);
+    var loading        = loadingState[0];
+    var setLoading     = loadingState[1];
+    var ratingsState   = useState({});
+    var ratings        = ratingsState[0];
+    var setRatings     = ratingsState[1];
+    var textsState     = useState({});
+    var texts          = textsState[0];
+    var setTexts       = textsState[1];
+    var doneState      = useState({});
+    var done           = doneState[0];
+    var setDone        = doneState[1];
+    var submittingState = useState(null);
+    var submitting     = submittingState[0];
+    var setSubmitting  = submittingState[1];
+
+    useEffect(function() {
+        getLessons().then(setLessons).finally(function() { setLoading(false); });
+    }, []);
+
+    function handleSubmit(lesson) {
+        if (!ratings[lesson.sys_id]) { alert('Please select a rating.'); return; }
+        setSubmitting(lesson.sys_id);
+        submitFeedback(lesson.sys_id, ratings[lesson.sys_id], texts[lesson.sys_id] || '')
+            .then(function() {
+                setDone(function(d) {
+                    var next = Object.assign({}, d);
+                    next[lesson.sys_id] = true;
+                    return next;
+                });
+            })
+            .finally(function() { setSubmitting(null); });
+    }
+
+    if (loading) {
+        return (
+            <div className="text-center py-4 text-muted">
+                <span className="spinner-border spinner-border-sm me-2" role="status"></span>Loading...
+            </div>
+        );
+    }
+
+    if (lessons.length === 0) {
+        return <div className="text-center py-5 text-muted fst-italic">No completed lessons pending feedback.</div>;
+    }
+
+    return (
+        <div>
+            {lessons.map(function(lesson) {
+                return (
+                    <div key={lesson.sys_id} className="card mb-3">
+                        <div className="card-body">
+                            {done[lesson.sys_id] ? (
+                                <div className="text-success fw-semibold">
+                                    Feedback submitted for {lesson.start_time}
+                                </div>
+                            ) : (
+                                <div>
+                                    <div className="small text-muted mb-3">
+                                        <strong className="text-dark">Teacher:</strong> {lesson.teacher || '-'}<br/>
+                                        <strong className="text-dark">Date:</strong> {lesson.start_time}
+                                    </div>
+                                    {lesson.summary && (
+                                        <div className="mb-3 small">
+                                            <strong>Lesson Summary:</strong>
+                                            <div className="mt-1" dangerouslySetInnerHTML={{__html: lesson.summary}}/>
+                                        </div>
+                                    )}
+                                    <label className="form-label fw-semibold small">Your Rating</label>
+                                    <div className="d-flex gap-1 mb-2">
+                                        {[1,2,3,4,5].map(function(star) {
+                                            var active = star <= (ratings[lesson.sys_id] || 0);
+                                            return (
+                                                <button key={star}
+                                                    className="btn p-0 border-0 bg-transparent"
+                                                    style={{fontSize:'28px', color: active ? '#f0a500' : '#dee2e6', lineHeight:1}}
+                                                    onClick={function() {
+                                                        setRatings(function(r) {
+                                                            var next = Object.assign({}, r);
+                                                            next[lesson.sys_id] = star;
+                                                            return next;
+                                                        });
+                                                    }}>
+                                                    &#9733;
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label small fw-semibold">Comments (optional)</label>
+                                        <textarea className="form-control form-control-sm" rows="3"
+                                            placeholder="Share your thoughts..."
+                                            value={texts[lesson.sys_id] || ''}
+                                            onChange={function(e) {
+                                                var val = e.target.value;
+                                                setTexts(function(t) {
+                                                    var next = Object.assign({}, t);
+                                                    next[lesson.sys_id] = val;
+                                                    return next;
+                                                });
+                                            }}/>
+                                    </div>
+                                    <button className="btn btn-primary btn-sm"
+                                        disabled={submitting === lesson.sys_id || !ratings[lesson.sys_id]}
+                                        onClick={function() { handleSubmit(lesson); }}>
+                                        {submitting === lesson.sys_id ? 'Submitting...' : 'Submit Feedback'}
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+    );
+}
+
+function App() {
+    var tabState = useState('book');
+    var tab      = tabState[0];
+    var setTab   = tabState[1];
+    var userName = (window.g_user) ? (window.g_user.fullName || window.g_user.userName || '') : '';
+
+    return (
+        <div className="container py-4" style={{maxWidth:'860px'}}>
+            <div className="mb-4">
+                <h4 className="fw-bold text-primary mb-0">German Language Learning</h4>
+                {userName && <small className="text-muted">Welcome, {userName}</small>}
+            </div>
+            <ul className="nav nav-tabs mb-4">
+                <li className="nav-item">
+                    <button className={"nav-link" + (tab === 'book' ? ' active' : '')}
+                        onClick={function() { setTab('book'); }}>
+                        Book a Lesson
+                    </button>
+                </li>
+                <li className="nav-item">
+                    <button className={"nav-link" + (tab === 'feedback' ? ' active' : '')}
+                        onClick={function() { setTab('feedback'); }}>
+                        Rate Your Lessons
+                    </button>
+                </li>
+            </ul>
+            {tab === 'book' ? <BookingCalendar/> : <FeedbackPanel/>}
+        </div>
+    );
+}
+
+ReactDOM.createRoot(document.getElementById('german-app')).render(<App/>);
+</script>]]></html>
+        <name>german_learning</name>
+        <processing_script><![CDATA[]]></processing_script>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-16 10:00:00</sys_created_on>
+        <sys_id>ab001000000000000000000000000040</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>german_learning</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sys_ui_page_ab001000000000000000000000000040</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-16 10:00:00</sys_updated_on>
+    </sys_ui_page>
+</record_update>

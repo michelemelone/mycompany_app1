@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_operation">
+    <sys_ws_operation action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <consumes>application/json</consumes>
+        <http_method>POST</http_method>
+        <name>Book Lesson</name>
+        <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+    var body      = request.body.data;
+    var startTime = body ? body.startTime : null;
+    var endTime   = body ? body.endTime   : null;
+
+    if (!startTime || !endTime) {
+        response.setStatus(400);
+        response.setBody({ error: 'startTime and endTime are required' });
+        return;
+    }
+
+    var availability = new x_608645_my_comp_0.LessonAvailability();
+
+    if (availability.hasStudentBookedThisWeek(gs.getUserID())) {
+        response.setStatus(400);
+        response.setBody({ error: 'You already have a lesson booked this week.' });
+        return;
+    }
+
+    if (!availability.isSlotAvailable(startTime, endTime)) {
+        response.setStatus(400);
+        response.setBody({ error: 'Slot no longer available. Please choose another.' });
+        return;
+    }
+
+    // Find an available teacher for this slot
+    var teacherSysId = '';
+    var roleGr = new GlideRecord('sys_user_has_role');
+    roleGr.addQuery('role', '1835f20d83100310345ba730ceaad351');
+    roleGr.addQuery('user.active', true);
+    roleGr.query();
+    while (roleGr.next()) {
+        var tId   = roleGr.getValue('user');
+        var check = new GlideRecord('x_608645_my_comp_0_lesson');
+        check.addQuery('teacher', tId);
+        check.addQuery('start_time', startTime);
+        check.addQuery('status', 'NOT IN', 'no_show');
+        check.query();
+        if (!check.hasNext()) {
+            teacherSysId = tId;
+            break;
+        }
+    }
+
+    if (!teacherSysId) {
+        response.setStatus(400);
+        response.setBody({ error: 'No available teacher for this slot.' });
+        return;
+    }
+
+    var lesson = new GlideRecord('x_608645_my_comp_0_lesson');
+    lesson.initialize();
+    lesson.setValue('student',    gs.getUserID());
+    lesson.setValue('teacher',    teacherSysId);
+    lesson.setValue('start_time', startTime);
+    lesson.setValue('end_time',   endTime);
+    lesson.setValue('status',     'scheduled');
+    var sysId = lesson.insert();
+
+    response.setStatus(201);
+    response.setBody({ success: true, sys_id: sysId });
+
+})(request, response);]]></operation_script>
+        <produces>application/json</produces>
+        <relative_path>/book</relative_path>
+        <requires_acl_authorization>true</requires_acl_authorization>
+        <requires_authentication>true</requires_authentication>
+        <short_description>Books a lesson slot for the current user - validates constraints and assigns an available teacher</short_description>
+        <web_service_definition display_value="German Learning API">ab001000000000000000000000000050</web_service_definition>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-16 10:00:00</sys_created_on>
+        <sys_id>ab001000000000000000000000000052</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Book Lesson</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sys_ws_operation_ab001000000000000000000000000052</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-16 10:00:00</sys_updated_on>
+    </sys_ws_operation>
+</record_update>
