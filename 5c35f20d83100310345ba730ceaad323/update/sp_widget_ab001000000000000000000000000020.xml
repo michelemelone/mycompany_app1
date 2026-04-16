@@ -99,9 +99,7 @@
     font-weight: 600;
 }
 .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    margin-bottom: 4px;
 }
 .day-col {
     background: #f8f9fa;
@@ -320,31 +318,33 @@
     {{c.message}}
   </div>
 
-  <div class="calendar-grid">
-    <div class="day-col" ng-repeat="day in c.weekDates">
-      <div class="day-header">
-        {{day.label}}
-        <small>{{day.display}}</small>
-      </div>
-      <div class="slot-list">
-        <div ng-if="c.getSlotsForDate(day.date).length === 0" class="no-slots">
-          No slots
+  <div class="row calendar-grid">
+    <div class="col-md-4 col-sm-4 col-xs-12" ng-repeat="day in c.weekDates" style="margin-bottom:12px;">
+      <div class="day-col">
+        <div class="day-header">
+          {{day.label}}
+          <small>{{day.display}}</small>
         </div>
-        <button
-          class="slot-btn"
-          ng-class="{
-            'available': slot.available && !c.alreadyBooked,
-            'full': !slot.available,
-            'selected': c.selectedSlot === slot,
-            'locked': c.alreadyBooked && slot.available
-          }"
-          ng-repeat="slot in c.getSlotsForDate(day.date)"
-          ng-click="c.selectSlot(slot)"
-          ng-disabled="!slot.available || c.alreadyBooked">
-          {{slot.label}}
-          <span ng-if="!slot.available" class="fa fa-times-circle" style="margin-left:4px;"></span>
-          <span ng-if="slot.available && !c.alreadyBooked" class="fa fa-check-circle" style="margin-left:4px;color:#28a745;"></span>
-        </button>
+        <div class="slot-list">
+          <div ng-if="c.getSlotsForDate(day.date).length === 0" class="no-slots">
+            No slots
+          </div>
+          <button
+            class="slot-btn"
+            ng-class="{
+              'available': slot.available && !c.alreadyBooked,
+              'full': !slot.available,
+              'selected': c.selectedSlot === slot,
+              'locked': c.alreadyBooked && slot.available
+            }"
+            ng-repeat="slot in c.getSlotsForDate(day.date)"
+            ng-click="c.selectSlot(slot)"
+            ng-disabled="!slot.available || c.alreadyBooked">
+            {{slot.label}}
+            <span ng-if="!slot.available" class="fa fa-times-circle" style="margin-left:4px;"></span>
+            <span ng-if="slot.available && !c.alreadyBooked" class="fa fa-check-circle" style="margin-left:4px;color:#28a745;"></span>
+          </button>
+        </div>
       </div>
     </div>
   </div>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_app_application">
+    <sys_app_application action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <name>My Company App1</name>
+        <roles>x_608645_my_comp_0.admin,x_608645_my_comp_0.user</roles>
+        <sys_class_name>sys_app_application</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-16 00:00:00</sys_created_on>
+        <sys_id>ab001000000000000000000000000030</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>My Company App1</sys_name>
+        <sys_package display_value="My Company App1" source="x_608645_my_comp_0">5c35f20d83100310345ba730ceaad323</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="My Company App1">5c35f20d83100310345ba730ceaad323</sys_scope>
+        <sys_update_name>sys_app_application_ab001000000000000000000000000030</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-16 00:00:00</sys_updated_on>
+    </sys_app_application>
+</record_update>

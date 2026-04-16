@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
-        <client_script><![CDATA[function($scope, $http, spUtil) {
+        <client_script><![CDATA[function($scope, spUtil) {
     var c = this;
-    c.lessons = [];
+    // Copy to a client-owned array so c.server.get() responses never overwrite it
+    c.lessons = (c.data.lessons || []).slice();
     c.submitting = false;
     c.message = '';
     c.messageType = '';
@@ -29,7 +30,7 @@
                 c.messageType = 'success';
                 c.message = 'Thank you for your feedback!';
             } else {
-                spUtil.addErrorMessage(r.data.error);
+                spUtil.addErrorMessage(r.data.error || 'Could not save feedback.');
             }
         });
     };
@@ -149,11 +150,11 @@
 
   <div ng-if="c.message" class="alert alert-{{c.messageType}}">{{c.message}}</div>
 
-  <div class="no-lessons" ng-if="c.data.lessons.length === 0">
+  <div class="no-lessons" ng-if="c.lessons.length === 0">
     No completed lessons pending feedback.
   </div>
 
-  <div class="lesson-card" ng-repeat="lesson in c.data.lessons" ng-if="!lesson.submitted">
+  <div class="lesson-card" ng-repeat="lesson in c.lessons" ng-if="!lesson.submitted">
     <div class="lesson-meta">
       <strong>Teacher:</strong> {{lesson.teacher}}<br/>
       <strong>Date:</strong> {{lesson.start_time}} – {{lesson.end_time}}
@@ -187,7 +188,7 @@
     </button>
   </div>
 
-  <div class="lesson-card" ng-repeat="lesson in c.data.lessons" ng-if="lesson.submitted">
+  <div class="lesson-card" ng-repeat="lesson in c.lessons" ng-if="lesson.submitted">
     <div class="feedback-done">
       <span class="fa fa-check-circle"></span> Feedback submitted for {{lesson.start_time}}
     </div>
